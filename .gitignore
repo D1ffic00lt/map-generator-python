@@ -1,0 +1,5 @@
+*.DS_Store
+*.json
+*.png
+__pychache__/
+.idea/
