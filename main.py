@@ -2,16 +2,17 @@ import requests
 
 
 class Map(object):
+
     def __init__(
             self, coordinates: tuple[float, float] = (0.0, 0.0), zoom: int = 10
     ):
         self.api_key = "0410f7f7f5afc21eaa20549570506f53"  # example
         self.coordinates: tuple = coordinates
         self.zoom = zoom
-        self.map_url = "http://static-maps.yandex.ru/1.x/?ll={ll}&z={z}&l={type}"
-        self.api_url_template = "http://api.positionstack.com/v1/forward?access_key={key}&query={query}"
         self.points = []
         self.type_of_point = "flag"
+        self.map_url = "http://static-maps.yandex.ru/1.x/?ll={ll}&z={z}&l={type}"
+        self.api_url_template = "http://api.positionstack.com/v1/forward?access_key={key}&query={query}"
         self.city = "Новосибирск"
         self.generate_url()
 
@@ -50,5 +51,3 @@ class Map(object):
             raise NameError(f"HTTP Error: {response.status_code} ({response.reason})")
         with open("map.png", "wb") as file:
             file.write(response.content)
-
-
