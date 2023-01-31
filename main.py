@@ -5,13 +5,14 @@ class Map(object):
     def __init__(
             self, coordinates: tuple[float, float] = (0.0, 0.0), zoom: int = 10
     ):
-        self.api_key = "0410f7f7f5afc21eaa20549570506f53"
+        self.api_key = "0410f7f7f5afc21eaa20549570506f53"  # example
         self.coordinates: tuple = coordinates
         self.zoom = zoom
         self.map_url = "http://static-maps.yandex.ru/1.x/?ll={ll}&z={z}&l={type}"
         self.api_url_template = "http://api.positionstack.com/v1/forward?access_key={key}&query={query}"
         self.points = []
         self.type_of_point = "flag"
+        self.city = "Новосибирск"
         self.generate_url()
 
     def convert_address_to_coordinates(self, address: str):
@@ -32,7 +33,7 @@ class Map(object):
     def generate_api_url(self, address: str):
         return self.api_url_template.format(
             key=self.api_key,
-            query=f"Новосибирск {address}"
+            query=f"{self.city} {address}"
         )
 
     def add_point(self, coordinates: tuple[float, float]):
@@ -51,9 +52,3 @@ class Map(object):
             file.write(response.content)
 
 
-map = Map((55.050097, 82.951196), zoom=10)
-addreses = [...]
-for i in addreses:
-    map.add_point(map.convert_address_to_coordinates(i))
-map()
-print(map.points)
