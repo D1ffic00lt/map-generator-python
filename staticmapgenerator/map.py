@@ -20,7 +20,7 @@ DEALINGS IN THE SOFTWARE.
 """
 import requests
 
-from typing import Union
+from typing import Union, Tuple
 
 __all__ = ("Map",)
 
@@ -29,7 +29,7 @@ class Map(object):
 
     def __init__(
             self, api_key: str,
-            coordinates: Union[tuple[float, float], str] = (0.0, 0.0),
+            coordinates: Union[Tuple[float, ...], str] = (0.0, 0.0),
             zoom: float = 10, type_of_point: str = "flag",
             points_city: str = "Moscow"
 
@@ -69,12 +69,12 @@ class Map(object):
 
         self.main_url = self.generate_map_url()
 
-    def convert_address_to_coordinates(self, address: str) -> tuple[float, float]:
+    def convert_address_to_coordinates(self, address: str) -> Tuple[float, ...]:
         request = requests.get(self.generate_api_url(address)).json()
         return request["data"][0]["latitude"], request["data"][0]["longitude"]
 
     @staticmethod
-    def convert_coordinates_to_text_view(coordinates: tuple[float, float]) -> str:
+    def convert_coordinates_to_text_view(coordinates: Tuple[float, ...]) -> str:
         return str(coordinates[1]) + "," + str(coordinates[0])
 
     def generate_map_url(self) -> str:
@@ -92,7 +92,7 @@ class Map(object):
             query=f"{self.city} {address}"
         )
 
-    def add_point(self, coordinates: Union[str, tuple[float, float]]) -> None:
+    def add_point(self, coordinates: Union[str, Tuple[float, ...]]) -> None:
         if isinstance(coordinates, str):
             self.points.append(self.convert_address_to_coordinates(coordinates))
         else:
@@ -107,9 +107,9 @@ class Map(object):
         self.points = []
         return map_url
 
-    def __call__(self) -> None:
+    def __call__(self, path: str = "") -> None:
         response = requests.get(self.main_url)
         if not response:
             raise NameError(f"HTTP Error: {response.status_code} ({response.reason})")
-        with open("map.png", "wb") as file:
+        with open(f"{path + '/' if path != '' else ''}map.png", "wb") as file:
             file.write(response.content)
