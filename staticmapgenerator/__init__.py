@@ -1,0 +1,1 @@
+from staticmapgenerator.map import *

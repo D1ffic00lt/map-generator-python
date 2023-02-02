@@ -3,3 +3,4 @@
 *.png
 __pychache__/
 .idea/
+dist
