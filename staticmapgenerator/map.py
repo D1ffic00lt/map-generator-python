@@ -37,21 +37,13 @@ class Map(object):
         """
 
         convert_address_to_coordinates(address: :class:`str`) -> tuple[float, float]
-            description
-        convert_coordinates_to_text_view(coordinates: tuple[float, float]) -> :class:`str`
-            description
-        generate_url() -> None
-            description
-        generate_api_url(address: :class:`str`) -> :class:`str`
-            description
+            The function converts the address to coordinates
+        generate_map_url() -> None
+            The function generates the main link
         add_point(coordinates: Union[str, tuple[float, float]]) -> None
-            description
-        generate_map_url() -> :class:`str`
-            description
-        generate_api_url(address: :class:`str`) -> :class:`str`
-            description
+            Add a point to the map
         commit_points(map_url: :class:`str`) -> :class:`str`
-            description
+            Confirm all points
         """
         self.__map_url = "http://static-maps.yandex.ru/1.x/?ll={ll}&z={z}&l={type}"
         self.__api_url_template = "http://api.positionstack.com/v1/forward?access_key={key}&query={query}"
@@ -70,23 +62,23 @@ class Map(object):
         self.main_url = self.generate_map_url()
 
     def convert_address_to_coordinates(self, address: str) -> Tuple[float, ...]:
-        request = requests.get(self.generate_api_url(address)).json()
+        request = requests.get(self.__generate_api_url(address)).json()
         return request["data"][0]["latitude"], request["data"][0]["longitude"]
 
     @staticmethod
-    def convert_coordinates_to_text_view(coordinates: Tuple[float, ...]) -> str:
+    def __convert_coordinates_to_text_view(coordinates: Tuple[float, ...]) -> str:
         return str(coordinates[1]) + "," + str(coordinates[0])
 
     def generate_map_url(self) -> str:
         url = self.__map_url.format(
-            ll=self.convert_coordinates_to_text_view(self.coordinates),
+            ll=self.__convert_coordinates_to_text_view(self.coordinates),
             z=self.zoom,
             type="map"
         )
         self.commit_points(url)
         return url
 
-    def generate_api_url(self, address: str) -> str:
+    def __generate_api_url(self, address: str) -> str:
         return self.__api_url_template.format(
             key=self.api_key,
             query=f"{self.city} {address}"
