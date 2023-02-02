@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "staticmapgenerator"
-version = "1.0.0rc2"
+version = "1.0.0"
 description = "Module generating images of maps by coordinates"
 authors = ["D1ffic00lt <dm.filinov@gmail.com>"]
 license = "MIT License"
